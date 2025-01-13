@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Datos</h1>
+    {% if rutas[0] %} {% for ruta in rutas %}
+    <h2>{{ruta['id']}} {{ruta['url']}}</h2>
+    <a
+      href="/flug/eliminar/{{ruta['id']}}/user/{{ruta['email']}}"
+      class="button"
+      >Eliminar</a
+    >
+    <a
+      href="/flug/Ejecution/{{ruta['id']}}/user/{{ruta['email']}}"
+      class="button"
+      >Iniciar</a
+    >
+    {% endfor %} {% else %}
+    <h4>Esta vacia</h4>
+    {% endif %}
+    <br /><br />
+    <a href="/anadir/{{email}}" class="button">Anadir</a>
+    <br /><br />
+    <a href="/flug/detener_ejecution/{{email}}" class="button">Detener</a>
+  </body>
+</html>

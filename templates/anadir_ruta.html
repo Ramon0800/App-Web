@@ -1,37 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <h1>Cree la ruta</h1>
-    <form action="/flug/ruta/{{email}}" method="post">
-      <label for="path">path_to_video</label>
-      <input type="text" name="path" id="path" required />
-      <small>Ingresa la direccion donde quieres que se guarde el video</small>
-      <label for="url">url</label>
-      <input type="text" name="url" id="url" required />
-      <small
-        >Busca la url de donde haras la grabacion
-        <a href="https://www.flightradar24.com">aqui</a> Intenta q se vea bien
-        la zona de donde quieres la grabacion</small
-      >
-      <label for="frames">frames/seg</label>
-      <input type="number" name="frames" id="frames" value="10" required />
-      <br /><br />
-      <label for="width">Ancho de pantalla</label>
-      <input type="number" name="width" id="width" value="1770" required />
-      <br /><br />
-      <label for="heigth">Altura de la pantalla</label>
-      <input type="number" name="heigth" id="heigth" value="720" required />
-      <br /><br />
-      <label for="interval">Intevalo entre un frames (s)</label>
-      <input type="number" name="interval" id="interval" value="10" required />
-      <button type="submit">Save</button>
-      <br /><br />
-    </form>
-    <a href="/flug/datos/{{email}}" class="button">Cancelar</a>
-  </body>
-</html>
+{% extends "base.html" %} {% block content %}
+<h1>Cree la ruta</h1>
+<form action="/flug/ruta/{{email}}" method="post">
+  <label for="path">path_to_video</label>
+  <input type="text" name="path" id="path" required />
+  <small>Ingresa la direccion donde quieres que se guarde el video</small>
+  <label for="url">url</label>
+  <input type="text" name="url" id="url" required />
+  <small
+    >Busca la url de donde haras la grabacion
+    <a href="https://www.flightradar24.com">aqui</a> Intenta q se vea bien la
+    zona de donde quieres la grabacion</small
+  >
+  <label for="frames">frames/seg</label>
+  <input type="number" name="frames" id="frames" value="10" required />
+  <br /><br />
+  <label for="width">Ancho de pantalla</label>
+  <input type="number" name="width" id="width" value="1770" required />
+  <br /><br />
+  <label for="heigth">Altura de la pantalla</label>
+  <input type="number" name="heigth" id="heigth" value="720" required />
+  <br /><br />
+  <label for="interval">Intevalo entre un frames (s)</label>
+  <input type="number" name="interval" id="interval" value="10" required />
+  <button type="submit">Save</button>
+  <br /><br />
+</form>
+<a href="/flug/datos/{{email}}" class="button">Cancelar</a>
+{% endblock %}

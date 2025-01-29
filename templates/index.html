@@ -1,40 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Flugtracker</title>
-    <link
-      rel="stylesheet"
-      href="{{url_for('static',path='/styles/index.css')}}"
-    />
-  </head>
-  <body>
-    <h1>
-      Bienvenido a Flugtracker:Es importante que leas lo q viene a continuacion
-    </h1>
-    <br />
-    <img src="static/imgs/airplane-routes-and-stars-vector-1109381.jpg" />
-    <p>
-      En este pequeno proyecto tenemos la intencion de de obtener informacion
-      mediante una url que nos proveeras,obtendremos los datos de un video que
-      se creara y al q tu tambien tendras acceso ,eventualmente podras pedir
-      informacion sobre el trafico aereo pero es necesario q nos ayudes a
-      entrenar el modelo con la zona q te interesa, si estas interesado en la
-      experiencia registrate..
-    </p>
-    <h2>Registrate o accede si ya estabas registrado</h2>
-    <br /><br />
-    <form action="/flug/login" method="post">
-      <label for="email">email</label>
-      <input type="email" name="email" id="email" />
-      <br /><br />
-      <label for="password">password</label>
-      <input type="password" name="password" id="password" />
-      <br /><br />
-      <button type="submit">Save</button>
-    </form>
-    <br /><br />
-    <a href="/registrar" class="button">Registrarse</a>
-  </body>
-</html>
+{% extends "base.html" %} {% block content %}
+<h1>
+  Bienvenido a Flugtracker:Es importante que leas lo q viene a continuacion
+</h1>
+<br />
+<img src="static/imgs/airplane-routes-and-stars-vector-1109381.jpg" />
+<p>
+  En este pequeno proyecto tenemos la intencion de de obtener informacion
+  mediante una url que nos proveeras,obtendremos los datos de un video que se
+  creara y al q tu tambien tendras acceso ,eventualmente podras pedir
+  informacion sobre el trafico aereo pero es necesario q nos ayudes a entrenar
+  el modelo con la zona q te interesa, si estas interesado en la experiencia
+  registrate..
+</p>
+<h2>Registrate o accede si ya estabas registrado</h2>
+<br /><br />
+<form action="/flug/login" method="post">
+  <label for="email">email</label>
+  <input type="email" name="email" id="email" />
+  <br /><br />
+  <label for="password">password</label>
+  <input type="password" name="password" id="password" />
+  <br /><br />
+  <button type="submit">Save</button>
+</form>
+<br /><br />
+<a href="/registrar" class="button">Registrarse</a>
+{% endblock %}

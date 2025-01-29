@@ -69,10 +69,12 @@ class PeriodicRecorder(Recorder, Thread):
         frames: float = 10.0,
         width: int = 1770,
         heigth: int = 720,
+        recording_time: int = 10 * 60 * 60,
     ):
         super().__init__(PATH_TO_VIDEO, INTERVAL, frames, width, heigth)
         Thread.__init__(self)
         self.url = url
+        self.recording_time = recording_time
         edge_options = Options()
         edge_options.add_argument("--headless")
         edge_options.add_argument("--disable-gpu")
@@ -122,11 +124,12 @@ class PeriodicRecorder(Recorder, Thread):
                 self.frame_count += 1
                 contador = self.frame_count
                 print(f"[NEW FRAME ADDED] Recorded {self.frame_count} frames in total")
-                if contador == (1200 // self.interval):
+                if (contador % (1200 // self.interval)) == 0:
                     self.driver.refresh()
                     tm.sleep(10)
+                if (contador * self.interval) >= self.recording_time:
                     contador = 0
-                    print("refrescado")
+                    self.release()
 
                     # waits for the time interval between frames to be over
                 tm.sleep(self.interval)

@@ -1,4 +1,9 @@
 {
-    "usuarios": [],
+    "usuarios": [
+        {
+            "email": "thalia@subasta123.com",
+            "password": "12345"
+        }
+    ],
     "rutas": []
 }

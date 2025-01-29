@@ -94,11 +94,14 @@ def create_ruta(
 ):
     id = uuid.uuid4()
     id_str = str(id)
+    change = path.replace("\\", "/")
+    change = f"{change}/output.mp4"
+    print(change)
     with open(file_path, "r") as file:
         data = json.load(file)
     new_ruta = {
         "id": id_str,
-        "path": path,
+        "path": change,
         "url": url,
         "frames": frames,
         "width": width,
@@ -120,7 +123,7 @@ def delete_ruta(request: Request, id: str, email: str):
     for ruta in data["rutas"]:
         if ruta["id"] == id:
             data["rutas"].remove(ruta)
-        break
+            break
     with open(file_path, "w") as json_file:
         json.dump(data, json_file, indent=4)
         return RedirectResponse(url=f"/flug/datos/{email}", status_code=303)
@@ -146,12 +149,10 @@ async def ejecutandose(
                 width=ruta["width"],
                 heigth=ruta["heigth"],
                 url=ruta["url"],
+                recording_time=RECORDING_TIME,
             )
             control.iniciar(thread=worker, url=ruta["url"], time_wait=20, time_out=20)
-            while not control.detenido:
-                tm.sleep(RECORDING_TIME)
-                worker.release()
-        break
+            break
     return RedirectResponse(url=f"/flug/datos/{email}", status_code=303)
 
 

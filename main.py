@@ -1,16 +1,12 @@
 from fastapi import FastAPI
 from fastapi.requests import Request
 from fastapi.responses import HTMLResponse
-from flug_router import flug_router
+from routers import flug_router
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import os
 
 app = FastAPI()
-# gt greater than
-# ge greater than or equal
-# lt less than
-# le less than or equal
 static_path = os.path.join(os.path.dirname(__file__), "static/")
 templates_path = os.path.join(os.path.dirname(__file__), "templates/")
 app.mount("/static", StaticFiles(directory=static_path), "static")
@@ -30,6 +26,7 @@ def registrar(request: Request):
     return templates.TemplateResponse("registrar.html", {"request": request})
 
 
+# Para anadidr los datos q seran pasados al grabador
 @app.get("/anadir/{email}", tags=["Home"], response_class=HTMLResponse)
 def anadir(request: Request, email: str):
     return templates.TemplateResponse(

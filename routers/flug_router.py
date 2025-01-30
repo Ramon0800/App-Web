@@ -3,8 +3,7 @@ from fastapi import APIRouter, Form, Depends
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.requests import Request
-import Monitores_Conexion as cm
-import Recorders as cr
+from clases_threads import Monitores_Conexion as cm, Recorders as cr
 import uuid
 import time as tm
 import json
@@ -19,7 +18,7 @@ file_path = "Users.json"
 
 control = cm.MonitorControl()
 
-"""Controlador para el monitor q nos indicara si hay internet ,esta clase esta definida en el modulo Monitores_Conexionn"""
+"""Controlador para el monitor q nos indicara si hay internet ,esta clase esta definida en el modulo Monitores_Conexion"""
 
 
 def obtener_control():
@@ -81,7 +80,7 @@ def get_recorders(request: Request, email: str):
     )
 
 
-# Para crear las rutas estas son los datos q son necesarios para los hilos
+# Para crear las rutas q son necesarios para los hilos
 @flug_router.post("/ruta/{email}", tags=["recorder"])
 def create_ruta(
     email: str,
@@ -116,8 +115,8 @@ def create_ruta(
 
 
 # Para eliminar las rutas
-@flug_router.get("/eliminar/{id}/user/{email}", tags=["recorder"])
-def delete_ruta(request: Request, id: str, email: str):
+@flug_router.delete("/eliminar/{id}/user/{email}", tags=["recorder"])
+async def delete_ruta(id: str, email: str):
     with open(file_path, "r") as file:
         data = json.load(file)
     for ruta in data["rutas"]:
@@ -130,9 +129,8 @@ def delete_ruta(request: Request, id: str, email: str):
 
 
 # Para dar inicio al proceso  de grabacion
-@flug_router.get("/Ejecution/{id}/user/{email}", tags=["Ejecucion"])
+@flug_router.post("/Ejecution/{id}/user/{email}", tags=["Ejecucion"])
 async def ejecutandose(
-    request: Request,
     id: str,
     email: str,
     control: cm.MonitorControl = Depends(obtener_control),
@@ -157,9 +155,9 @@ async def ejecutandose(
 
 
 # Para detener el proceso de grabacion
-@flug_router.get("/detener_ejecution/{email}", tags=["Ejecucion"])
+@flug_router.post("/detener_ejecution/{email}", tags=["Ejecucion"])
 async def detener_ejecucion(
-    request: Request, email: str, control: cm.MonitorControl = Depends(obtener_control)
+    email: str, control: cm.MonitorControl = Depends(obtener_control)
 ):
     control.detener()
     return RedirectResponse(url=f"/flug/datos/{email}", status_code=303)

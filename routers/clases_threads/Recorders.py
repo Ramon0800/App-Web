@@ -38,6 +38,8 @@ class Recorder:
         )
         self.frame_count = 0
 
+    """ Esta clase sirve de base para crear a otras clases de grabacion"""
+
     def stop(self):
         self.out.release()
         print(
@@ -61,6 +63,8 @@ class Recorder:
 
 
 class PeriodicRecorder(Recorder, Thread):
+    """En esta clse se lleva a cabo todo el proceso de grabacion"""
+
     def __init__(
         self,
         url: str = "https://www.flightradar24.com/23.42,-79.95/6",

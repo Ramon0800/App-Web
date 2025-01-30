@@ -13,6 +13,8 @@ class Monitor:
         self.url = url
         self.time_out = time_out
 
+    """ Esta clase es una base para crear clases q monitoreen la conexion"""
+
     # Verifica y controla la conexion a internet
     def check_connection(self):
         try:
@@ -35,6 +37,10 @@ class MonitorThread(Monitor, Thread):
         self.thread = thread
         self.time_wait = time_wait
         self.stop_thread = Event()
+
+    """Monitor thread es una clase creada especialmente para este proyecto 
+mediante la url a la cual le haremos la grabacion determina si hay conexion y da inicio al hilo de grabacion 
+en caso de q haya pasdo un periodo de tiempo sin encontrar la conexion este detendra el hilo de grabacion existente y dara inicio a uno nuevo """
 
     def stop(self):
         if self.thread.is_alive():
@@ -70,6 +76,8 @@ class MonitorControl:
     def __init__(self):
         self.monitor = None
         self.detenido = False
+
+    """ Esta clase nos a permitir controlar al monitor desde los endpoints, dandole inicio y deteniendo el proceso """
 
     def iniciar(
         self,

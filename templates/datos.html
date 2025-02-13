@@ -1,18 +1,38 @@
 {% extends "base.html" %} {% block content %}
-<h1>Datos</h1>
-{% if rutas[0] %} {% for ruta in rutas %}
-<h2>{{ruta['id']}} {{ruta['url']}}</h2>
-<a href="/flug/eliminar/{{ruta['id']}}/user/{{ruta['email']}}" class="button"
-  >Eliminar</a
->
-<a href="/flug/Ejecution/{{ruta['id']}}/user/{{ruta['email']}}" class="button"
-  >Iniciar</a
->
-{% endfor %} {% else %}
-<h4>Esta vacia</h4>
-{% endif %}
-<br /><br />
-<a href="/anadir/{{email}}" class="button">Anadir</a>
-<br /><br />
-<a href="/flug/detener_ejecution/{{email}}" class="button">Detener</a>
+<article class="card">
+  <div class="List">
+    <h2 class="local">Rutas</h2>
+    <div class="scrol">
+      <table>
+        <tbody>
+          {% if rutas[0] %} {% for ruta in rutas %}
+          <tr>
+            <td>
+              <div class="container">
+                <div class="lin"><p>{{ruta['url']}}</p></div>
+                <div class="btns">
+                 <button class="button post-btn" post-id="{{ruta['id']}}">Iniciar</button>
+                 <button class="button delete-btn" data-id="{{ruta['id']}}">Eliminar</button>
+                </div>
+              </div>
+            </td>
+          </tr>
+          {% endfor %} {% else %}
+          <h3 class="claro">No hay rutas</h3></
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <a href="/anadir/{{email}}"><button class="btn btn-list">Añadir</button></a>
+    </div>
+  </div>
+  <div class="centro">
+    <div class="img-container"><img id="image" class="image" src="http://127.0.0.1:8000/static/imgs/airplane-routes-and-stars-vector-1109381.jpg" alt="Frame"/></div>
+    <div id="notifications" class="notifications"></div>
+    <button id="detener-btn" class="btn detener-btn" disabled>Detener</button>
+  </div>
+</article>
+<script src="{{url_for('static',path='/scripts/script.js')}}"></script>
+
 {% endblock %}

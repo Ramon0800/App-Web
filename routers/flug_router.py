@@ -1,17 +1,18 @@
 from typing import Annotated
-from fastapi import APIRouter, Form, Depends
-from fastapi.responses import RedirectResponse
+from fastapi import APIRouter, Form, Depends, HTTPException
+from fastapi.responses import RedirectResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.requests import Request
-from clases_threads import Monitores_Conexion as cm, Recorders as cr
+from routers.clases_threads import Monitores_Conexion as cm, Recorders as cr
 import uuid
-import time as tm
+import glob
 import json
 import os
+import asyncio
 
 flug_router = APIRouter()
 
-templates_path = os.path.join(os.path.dirname(__file__), "templates/")
+templates_path = os.path.join(os.path.dirname(__file__), "../templates/")
 templates = Jinja2Templates(directory=templates_path)
 file_path = "Users.json"
 
@@ -19,15 +20,44 @@ file_path = "Users.json"
 control = cm.MonitorControl()
 
 """Controlador para el monitor q nos indicara si hay internet ,esta clase esta definida en el modulo Monitores_Conexion"""
+clients = []
 
 
 def obtener_control():
     return control
 
 
+# Para manejar el envio de notifcaciones
+async def genera_notification(queue: asyncio.Queue):
+    while True:
+        message = await queue.get()
+        yield f"data:{message}\n\n"
+
+
+async def send_notification(message: str):
+    for client in clients:
+        await client.put(message)
+    return
+
+
+@flug_router.get("/notifications")
+async def notifications(request: Request):
+    try:
+        queue = asyncio.Queue()
+        clients.append(queue)
+
+        return StreamingResponse(
+            genera_notification(queue), media_type="text/event-stream"
+        )
+    except asyncio.CancelledError:
+        clients.remove(queue)
+        print("cliente removido")
+    return
+
+
 # Endpoint para crear usuario
 @flug_router.post("/create_user")
-def save_user(
+async def save_user(
     email: Annotated[str, Form()],
     password: Annotated[str, Form()],
     confirmpassword: Annotated[str, Form()],
@@ -43,30 +73,27 @@ def save_user(
             with open(file_path, "w") as json_file:
                 json.dump(data, json_file, indent=4)
         else:
-            print("Las contrasenas no coinciden intentenlo nuevamente")
-            return RedirectResponse("/registrar", status_code=303)
+            return RedirectResponse(url=f"/registrar", status_code=303)
     else:
-        print("Este usuario ya existe")
-        return RedirectResponse("/registrar", status_code=303)
+        return RedirectResponse(url=f"/registrar", status_code=303)
+
     return RedirectResponse(url=f"datos/{email}", status_code=303)
 
 
 # Endpoint para el login del usuario
 @flug_router.post("/login")
-def save_user(email: Annotated[str, Form()], password: Annotated[str, Form()]):
+async def save_user(email: Annotated[str, Form()], password: Annotated[str, Form()]):
+
     with open(file_path, "r") as file:
         data = json.load(file)
     user = [usuario for usuario in data["usuarios"] if usuario["email"] == email]
-    print(user)
-
     if user:
         if user[0]["password"] == password:
             return RedirectResponse(url=f"datos/{email}", status_code=303)
         else:
-            print("Contrasena incorrecta")
+            return RedirectResponse(url=f"/", status_code=303)
     else:
-        print("Este usuario no existe por favor registrate antes de intentar acceder")
-    return RedirectResponse("/", status_code=303)
+        return RedirectResponse(url=f"/", status_code=303)
 
 
 # Para llegar lo q seria la pagina donde se muestran las principales interacciones
@@ -94,8 +121,6 @@ def create_ruta(
     id = uuid.uuid4()
     id_str = str(id)
     change = path.replace("\\", "/")
-    change = f"{change}/output.mp4"
-    print(change)
     with open(file_path, "r") as file:
         data = json.load(file)
     new_ruta = {
@@ -115,8 +140,8 @@ def create_ruta(
 
 
 # Para eliminar las rutas
-@flug_router.delete("/eliminar/{id}/user/{email}", tags=["recorder"])
-async def delete_ruta(id: str, email: str):
+@flug_router.delete("/eliminar/{id}", tags=["recorder"])
+async def delete_ruta(id: str):
     with open(file_path, "r") as file:
         data = json.load(file)
     for ruta in data["rutas"]:
@@ -125,16 +150,16 @@ async def delete_ruta(id: str, email: str):
             break
     with open(file_path, "w") as json_file:
         json.dump(data, json_file, indent=4)
-        return RedirectResponse(url=f"/flug/datos/{email}", status_code=303)
+    return await send_notification(f"Ruta {id} eliminada")
 
 
 # Para dar inicio al proceso  de grabacion
-@flug_router.post("/Ejecution/{id}/user/{email}", tags=["Ejecucion"])
+@flug_router.post("/Ejecution/{id}", tags=["Ejecucion"])
 async def ejecutandose(
     id: str,
-    email: str,
     control: cm.MonitorControl = Depends(obtener_control),
 ):
+    await send_notification("Iniciando")
     with open(file_path, "r") as file:
         data = json.load(file)
     for ruta in data["rutas"]:
@@ -148,16 +173,20 @@ async def ejecutandose(
                 heigth=ruta["heigth"],
                 url=ruta["url"],
                 recording_time=RECORDING_TIME,
+                path_to_imgs="C:/THALIA/Proyectos/trabajando con fastapi/Flugtracker/static/imgs",
             )
             control.iniciar(thread=worker, url=ruta["url"], time_wait=20, time_out=20)
             break
-    return RedirectResponse(url=f"/flug/datos/{email}", status_code=303)
 
 
 # Para detener el proceso de grabacion
-@flug_router.post("/detener_ejecution/{email}", tags=["Ejecucion"])
-async def detener_ejecucion(
-    email: str, control: cm.MonitorControl = Depends(obtener_control)
-):
+@flug_router.get("/detener_ejecution", tags=["Ejecucion"])
+async def detener_ejecucion(control: cm.MonitorControl = Depends(obtener_control)):
     control.detener()
-    return RedirectResponse(url=f"/flug/datos/{email}", status_code=303)
+    direc = "C:/THALIA/Proyectos/trabajando con fastapi/Flugtracker/static/imgs"
+    name = "airplane-routes-and-stars-vector-1109381.jpg"
+    files = glob.glob(os.path.join(direc, "*"))
+    for file in files:
+        if os.path.basename(file) != name:
+            os.remove(file)
+    return await send_notification("Detenido")

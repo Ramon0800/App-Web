@@ -1,5 +1,5 @@
 from threading import Thread, Event
-from Recorders import PeriodicRecorder
+from .Recorders import PeriodicRecorder
 import time as tm
 import requests as rq
 
@@ -66,7 +66,13 @@ en caso de q haya pasdo un periodo de tiempo sin encontrar la conexion este dete
                         self.thread.join()
                         self.thread = PeriodicRecorder(
                             url=self.thread.url,
-                            interval_seconds=self.thread.interval_seconds,
+                            PATH_TO_VIDEO=self.thread.PATH,
+                            INTERVAL=self.thread.interval,
+                            frames=self.thread.frame,
+                            width=self.thread.width,
+                            heigth=self.thread.height,
+                            recording_time=self.thread.recording_time,
+                            path_to_imgs=self.thread.path_img,
                         )
             tm.sleep(self.time_wait)
         print("hilo monitor detenido")

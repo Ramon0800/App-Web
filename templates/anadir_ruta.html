@@ -1,29 +1,71 @@
 {% extends "base.html" %} {% block content %}
-<h1>Cree la ruta</h1>
-<form action="/flug/ruta/{{email}}" method="post">
-  <label for="path">path_to_video</label>
-  <input type="text" name="path" id="path" required />
-  <small>Ingresa la direccion donde quieres que se guarde el video</small>
-  <label for="url">url</label>
-  <input type="text" name="url" id="url" required />
-  <small
-    >Busca la url de donde haras la grabacion
-    <a href="https://www.flightradar24.com">aqui</a> Intenta q se vea bien la
-    zona de donde quieres la grabacion</small
-  >
-  <label for="frames">frames/seg</label>
-  <input type="number" name="frames" id="frames" value="10" required />
+<form action="/flug/ruta/{{email}}" method="post" class="card">
+  <h1>Cree la ruta</h1>
+  <div class="form-row">
+    <div class="form-group">
+      <label for="path">Path_to_video:</label><br />
+      <input type="text" name="path" id="path" class="int" required /><br />
+      <small>Ingresa la direccion donde quieres que se guarde el video</small>
+    </div>
+    <div class="form-group">
+      <label for="url">Url:</label><br />
+      <input type="text" name="url" id="url" class="int" required /><br />
+      <small
+        >Busca la url de donde haras la grabación
+        <a href="https://www.flightradar24.com">aquí</a> Intenta q se vea bien
+        la zona
+      </small>
+    </div>
+    <div class="form-group">
+      <label for="frames">Frames/seg:</label><br />
+      <input
+        type="number"
+        name="frames"
+        id="frames"
+        value="10"
+        class="int"
+        required
+      />
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group">
+      <label for="width">Ancho de pantalla:</label><br />
+      <input
+        type="number"
+        name="width"
+        id="width"
+        value="1770"
+        class="int"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="heigth">Altura de la pantalla:</label><br />
+      <input
+        type="number"
+        name="heigth"
+        id="heigth"
+        value="720"
+        class="int"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="interval">Intevalo entre un frames (s):</label>
+      <input
+        type="number"
+        name="interval"
+        id="interval"
+        value="10"
+        class="int"
+        required
+      />
+    </div>
+  </div>
   <br /><br />
-  <label for="width">Ancho de pantalla</label>
-  <input type="number" name="width" id="width" value="1770" required />
-  <br /><br />
-  <label for="heigth">Altura de la pantalla</label>
-  <input type="number" name="heigth" id="heigth" value="720" required />
-  <br /><br />
-  <label for="interval">Intevalo entre un frames (s)</label>
-  <input type="number" name="interval" id="interval" value="10" required />
-  <button type="submit">Save</button>
-  <br /><br />
+  <button type="submit" class="btn center">Save</button><br />
+  <a href="/flug/datos/{{email}}" class="cancel center">Cancelar</a>
 </form>
-<a href="/flug/datos/{{email}}" class="button">Cancelar</a>
+
 {% endblock %}

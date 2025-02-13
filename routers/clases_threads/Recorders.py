@@ -10,6 +10,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
 from PIL import Image
+import os
 import cv2
 import time as tm
 import numpy as np
@@ -33,8 +34,12 @@ class Recorder:
         self.height = heigth
         fourcc = cv2.VideoWriter_fourcc(*"mp4v")
         timestamp = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+        filename = timestamp + "_output.mp4"
+        dic_destino = os.path.join(self.PATH, filename)
+        if not os.path.exists(self.PATH):
+            os.makedirs(self.PATH)
         self.out = cv2.VideoWriter(
-            timestamp + "_" + self.PATH, fourcc, self.frame, (self.width, self.height)
+            dic_destino, fourcc, self.frame, (self.width, self.height)
         )
         self.frame_count = 0
 
@@ -56,8 +61,12 @@ class Recorder:
         # set up new video file
         fourcc = cv2.VideoWriter_fourcc(*"mp4v")
         timestamp = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+        filename = timestamp + "_output.mp4"
+        dic_destino = os.path.join(self.PATH, filename)
+        if not os.path.exists(self.PATH):
+            os.makedirs(self.PATH)
         self.out = cv2.VideoWriter(
-            timestamp + "_" + self.PATH, fourcc, self.frame, (self.width, self.height)
+            dic_destino, fourcc, self.frame, (self.width, self.height)
         )
         self.frame_count = 0
 
@@ -74,11 +83,14 @@ class PeriodicRecorder(Recorder, Thread):
         width: int = 1770,
         heigth: int = 720,
         recording_time: int = 10 * 60 * 60,
+        path_to_imgs: str = None,
     ):
         super().__init__(PATH_TO_VIDEO, INTERVAL, frames, width, heigth)
         Thread.__init__(self)
         self.url = url
         self.recording_time = recording_time
+        self.path_img = path_to_imgs
+
         edge_options = Options()
         edge_options.add_argument("--headless")
         edge_options.add_argument("--disable-gpu")
@@ -91,7 +103,15 @@ class PeriodicRecorder(Recorder, Thread):
         service = Service("C:\THALIA\Webdrivers\E131\msedgedriver.exe")
         self.driver = webdriver.Edge(service=service, options=edge_options)
 
-    def screenshoot(self):
+    def save_img(self, img_np, cont):
+        img = Image.fromarray(img_np)
+        direc = self.path_img
+        ruta_file = os.path.join(direc, f"{cont}captura.png")
+        if not os.path.exists(direc):
+            os.makedirs(direc)
+        img.save(ruta_file)
+
+    def screenshot(self):
         img = self.driver.get_screenshot_as_png()
         img = Image.open(BytesIO(img))
         img_np = np.asarray(img)
@@ -122,7 +142,9 @@ class PeriodicRecorder(Recorder, Thread):
             cookie_button.click()
             print("Banner de cookies manejadas correctamente")
             while True:
-                img_np = self.screenshoot()
+                img_np = self.screenshot()
+                if self.path_img != None:
+                    self.save_img(img_np, contador)
                 # Write the __frame to the video file
                 self.out.write(cv2.cvtColor(img_np, cv2.COLOR_RGB2BGR))
                 self.frame_count += 1

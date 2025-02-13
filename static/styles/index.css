@@ -1,4 +1,346 @@
-img {
-  max-width: 50%;
+* {
+  margin: 0;
+  padding: 0;
+}
+.btn {
+  width: 240px;
+  height: 40px;
+  background: #104c64;
+  border: none;
+  margin: 30px 0px 0px 0px;
+  font-size: 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #fff;
+  transition: 0.4s ease;
+}
+
+.btn:hover {
+  background: #f25200;
+  color: #fff;
+  font-weight: bold;
+}
+
+.btn a {
+  text-decoration: none;
+  color: #fff;
+  transition: 0.3s ease;
+  font-weight: bold;
+}
+
+.btn-list {
+  margin-top: 30px;
+  margin-left: 215px;
+}
+
+.button {
+  margin-left: 20px;
+  width: 100px;
+  height: 25px;
+  background: #104c64;
+  border: none;
+  font-size: 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #fff;
+  transition: 0.4s ease;
+}
+.button:hover {
+  background: #f25200;
+  color: #fff;
+  font-weight: bold;
+}
+
+button:disabled {
+  background-color: #203138;
+  color: #666;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.cancel {
+  padding-left: 90px;
+  color: #000;
+}
+.card {
+  width: 1150px;
+  height: 500px;
+  top: 70px;
+  margin-left: 70px;
+  background: #fff;
+  padding-top: 30px;
+  padding-left: 50px;
+  border-radius: 20px;
+  box-shadow: 14px 14px 20px 0 rgb(255, 73, 2);
+}
+
+.center {
+  margin-left: 400px;
+}
+
+.centro {
+  left: 150px;
+  position: absolute;
+  top: 200px;
+  right: 30%;
+  width: 140px;
+}
+
+.claro {
+  font-family: Arial, Helvetica, sans-serif;
+  padding-left: 100px;
+  letter-spacing: 2px;
+  color: #646464;
+  position: absolute;
+  top: 50px;
+  right: 35%;
+  text-align: center;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  width: 90%;
+  margin-top: 10px;
+  margin-left: 20px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+  transition: all 400ms ease;
+  border-bottom: 1px solid #104c64;
+}
+
+.container:hover {
+  box-shadow: 0px 1px 10px 0 rgb(13, 121, 148);
+  transform: translateY(-3%);
+}
+
+.content {
+  width: 1200px;
   height: auto;
+  margin: auto;
+  color: #fff;
+  position: relative;
+  padding-left: 20px;
+}
+
+.content .par {
+  padding-left: 20px;
+  padding-bottom: 25px;
+  font-family: Arial;
+  letter-spacing: 1.2px;
+  line-height: 30px;
+}
+
+.content h1 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 40px;
+  padding-left: 15px;
+  margin-top: 9%;
+  letter-spacing: 2px;
+}
+
+.content .cn {
+  width: 160px;
+  height: 40px;
+  background: #f25200;
+  border: none;
+  margin-bottom: 10px;
+  margin-left: 20px;
+  font-size: 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.4s ease;
+  box-shadow: 14px 14px 20px 0 rgb(3, 20, 248);
+}
+
+.content .cn a {
+  text-decoration: none;
+  color: #000;
+  transition: 0.3s ease;
+  font-weight: bold;
+}
+
+.cn:hover {
+  background-color: #fbe4d8;
+}
+
+.content span {
+  color: #f25200;
+  font-size: 45px;
+}
+.error {
+  color: red;
+}
+.Form {
+  width: 260px;
+  background-color: #fff;
+  position: absolute;
+  top: -20px;
+  left: 870px;
+  border-radius: 10px;
+  padding: 25px;
+  box-shadow: 14px 14px 20px 0 rgb(255, 73, 2);
+}
+
+h2 {
+  width: 220px;
+  font-family: sans-serif;
+  text-align: center;
+  color: #fff;
+  font-size: 22px;
+  background-color: #f25200;
+  border-radius: 10px;
+  margin: 2px;
+  padding: 8px;
+}
+
+.Form .inp {
+  width: 240px;
+  height: 35px;
+  background: transparent;
+  border-bottom: 1px solid #104c64;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  color: #104c64;
+  font-size: 15px;
+  letter-spacing: 1px;
+  margin-top: 30px;
+  font-family: sans-serif;
+}
+
+.Form .inp:focus {
+  outline: none;
+}
+
+.form-row {
+  display: flex;
+}
+.form-group {
+  padding: 5px;
+  width: 50%;
+}
+
+.icon {
+  width: 200px;
+  float: left;
+  height: 70px;
+}
+.img-container {
+  text-align: center;
+  margin-top: -70px;
+}
+.image {
+  border-radius: 20px;
+  width: 300px;
+  height: 200px;
+  margin-left: -25px;
+}
+.int {
+  width: 240px;
+  height: 35px;
+  background: transparent;
+  border-radius: 10px;
+  color: #104c64;
+  font-size: 15px;
+  letter-spacing: 1px;
+  font-family: sans-serif;
+  box-shadow: 3px 3px 3px 0 rgba(17, 87, 119, 0.425);
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+label {
+  display: inline-block;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-top: 30px;
+}
+
+.lin {
+  width: 270px;
+}
+
+.lin p {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.List {
+  width: 650px;
+  max-height: 480px;
+  background-color: #fff;
+  left: 450px;
+  position: absolute;
+}
+
+.local {
+  position: absolute;
+  right: 30%;
+}
+
+.logo {
+  color: #f25200;
+  font-size: 35px;
+  font-family: Arial;
+  padding-left: 20px;
+  float: left;
+  padding-top: 10px;
+}
+.master {
+  width: 100%;
+  background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.7) 50%,
+      rgba(0, 0, 0, 0.7) 50%
+    ),
+    url("../imgs/airplane-routes-and-stars-vector-1109381.jpg");
+  background-position: center;
+  background-size: cover;
+  height: 109vh;
+}
+
+.nav {
+  width: 1200px;
+  height: 75px;
+  margin: auto;
+}
+.notifications {
+  width: 500px;
+}
+.notifications p {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.scrol {
+  width: 650px;
+  height: 350px;
+  overflow-y: scroll;
+  margin-top: 50px;
+  margin-left: 150px;
+}
+
+.text {
+  font-size: 20px;
+  padding-left: 20px;
+}
+
+.ubico {
+  height: 360px;
+  position: absolute;
+  top: 100px;
+  left: 500px;
+}
+
+::placeholder {
+  color: #104c64;
+  font-family: Arial;
 }

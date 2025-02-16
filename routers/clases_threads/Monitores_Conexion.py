@@ -43,10 +43,11 @@ mediante la url a la cual le haremos la grabacion determina si hay conexion y da
 en caso de q haya pasdo un periodo de tiempo sin encontrar la conexion este detendra el hilo de grabacion existente y dara inicio a uno nuevo """
 
     def stop(self):
+        self.stop_thread.set()
         if self.thread.is_alive():
             self.thread.stop()
             self.thread.join()
-        self.stop_thread.set()
+        print("hilo de grabacion detenido")
 
     # Da inicio al hilo q maneja o crea uno nuevo
     def run(self):
@@ -56,6 +57,16 @@ en caso de q haya pasdo un periodo de tiempo sin encontrar la conexion este dete
                 print("Connection finded!!!!!!")
                 count = 0
                 if not self.thread.is_alive():
+                    self.thread = PeriodicRecorder(
+                        url=self.thread.url,
+                        PATH_TO_VIDEO=self.thread.PATH,
+                        INTERVAL=self.thread.interval,
+                        frames=self.thread.frame,
+                        width=self.thread.width,
+                        heigth=self.thread.height,
+                        recording_time=self.thread.recording_time,
+                        path_to_imgs=self.thread.path_img,
+                    )
                     self.thread.start()
             else:
                 print("Search connection")
@@ -64,16 +75,6 @@ en caso de q haya pasdo un periodo de tiempo sin encontrar la conexion este dete
                     if self.thread.is_alive():
                         self.thread.stop()
                         self.thread.join()
-                        self.thread = PeriodicRecorder(
-                            url=self.thread.url,
-                            PATH_TO_VIDEO=self.thread.PATH,
-                            INTERVAL=self.thread.interval,
-                            frames=self.thread.frame,
-                            width=self.thread.width,
-                            heigth=self.thread.height,
-                            recording_time=self.thread.recording_time,
-                            path_to_imgs=self.thread.path_img,
-                        )
             tm.sleep(self.time_wait)
         print("hilo monitor detenido")
 
